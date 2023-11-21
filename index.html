@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<div style=" width:100%; display: flex; justify-items: center; align-items: center; width: 100%;">
+    <canvas style="border-color: #000000; border-width: 5px; border-radius: 5px; border-style: solid;">
+
+    </canvas>
+</div>
+<input placeholder="Nume">
+<input placeholder="Prenume">
+<input placeholder="Telefon">
+<input placeholder="Email">
+<br />
+<button onclick="submit()" style="margin-top: 5em; width:100%;">trimite</button>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <script>
+        const canvas = document.querySelector("canvas");
+        const signaturePad = new SignaturePad(canvas, {
+            penColor: "#0802b8"
+        });
+        const __u = atob('aHR0cHM6Ly9xcWRqZmpiZWhrc2Fobm5zYmNqcS5zdXBhYmFzZS5jbw==')
+        const _s = supabase.createClient(__u, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxZGpmamJlaGtzYWhubnNiY2pxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDA1ODE2ODQsImV4cCI6MjAxNjE1NzY4NH0.fjxnNjSMWO_KP1UwFVHEy2yxCFjIE1gWax66KjJ0PVM')
+        const submit = () => {
+            nume = document.querySelector("input[placeholder='Nume']").value;
+            prenume = document.querySelector("input[placeholder='Prenume']").value;
+            nrtel = document.querySelector("input[placeholder='Telefon']").value;
+            mail = document.querySelector("input[placeholder='Email']").value;
+            semnatura = signaturePad.toDataURL();
+            _s
+                .from('signatures')
+                .insert([
+                    { nume: nume, prenume: prenume, nrtel: nrtel, mail: mail, semnatura: semnatura }
+                ])
+                .then(console.log)
+                .catch(console.error)
+        }
+    </script>
+</body>
+
+</html>
